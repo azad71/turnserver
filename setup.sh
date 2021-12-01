@@ -107,6 +107,16 @@ cat copy-cert.sh >>  "$renewal_post"
 
 certbot certonly --standalone -d "$domain_name"
 
+# copy certificates in /cert and /etc/coturn/certs
+cp "/etc/letsencrypt/live/$domain_name/cert.pem" /cert/cert.pem
+cp "/etc/letsencrypt/live/$domain_name/fullchain.pem" /cert/full.pem
+cp "/etc/letsencrypt/live/$domain_name/privkey.pem" /cert/key.pem
+
+cp "/etc/letsencrypt/live/$domain_name/cert.pem" /etc/coturn/certs/cert.pem
+cp "/etc/letsencrypt/live/$domain_name/fullchain.pem" /etc/coturn/certs/full.pem
+cp "/etc/letsencrypt/live/$domain_name/privkey.pem" /etc/coturn/certs/key.pem
+
+
 username=azad71
 password=cefd9faf8
 
@@ -122,7 +132,7 @@ npm i grunt
 pip install -r requirements.txt
 npm i --dev coffeescript
 constantDir=/root/apprtc/src/app_engine/constants.py
-cat constants.txt >  $constantDir
+cat constants.py >  $constantDir
 sed -i "s/example.com/$domain_name/" $constantDir
 sed -i "s/server_ip/$server_ip/" $constantDir
 sed -i "s/user_name/$username/" $constantDir
@@ -159,10 +169,16 @@ wget https://dl.google.com/dl/cloudsdk/channels/rapid/downloads/google-cloud-sdk
 tar xzvf google-cloud-sdk-330.0.0-linux-x86_64.tar.gz
 ./google-cloud-sdk/install.sh
 
+# install gcloud python plugins
+/root/google-cloud-sdk/bin/dev_appserver.py /root/apprtc/out/app_engine/
 
-gcdPath=/root/google-cloud-sdk/platform/google_appengine/google/appengine/tools/devappserver2/wsgi_server.py
-
-
+# copy wsgi_server.py to directory
+gcdPath=/root/google-cloud-sdk/platform/google_appengine/google/appengine/tools/devappserver2/wsgi_server>
 cat wsgi_server.py > $gcdPath
+
+printf "\nCleaning up..."
+rm -rf google-cloud-sdk-330.0.0-linux-x86_64.tar.gz
+pkill python
+
 
 printf "\nSuccessfully setup turnserver...\n"

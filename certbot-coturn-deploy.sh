@@ -18,7 +18,7 @@ for domain in $RENEWED_DOMAINS; do
             # copying for collidermain
             cp "$RENEWED_LINEAGE/fullchain.pem" "/cert/full.pem"
             cp "$RENEWED_LINEAGE/privkey.pem" "/cert/key.pem"
-            cp "$RENEWED_LINEAGE/certificate.pem" "/cert/cert.pem"
+            cp "$RENEWED_LINEAGE/cert.pem" "/cert/cert.pem"
             
             # Apply the proper file ownership and permissions for
             # the daemon to read its certificate and key.
